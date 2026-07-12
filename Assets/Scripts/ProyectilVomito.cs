@@ -29,14 +29,22 @@ public class ProyectilVomito : MonoBehaviour
         // Ignorar otros enemigos y sus proyectiles
         if (other.GetComponentInParent<VidaEnemigo>() != null) return;
 
-        // Dañar al jugador
+        // Dañar y ralentizar al jugador
         if (other.CompareTag("Player") || other.GetComponent<Vida>() != null || other.GetComponentInParent<Vida>() != null)
         {
             Vida vidaJugador = other.GetComponent<Vida>() ?? other.GetComponentInParent<Vida>();
             if (vidaJugador != null)
             {
                 vidaJugador.RecibirDano(dano);
-                Debug.Log("[ProyectilVomito] Impacto al jugador.");
+
+                // Aplicar ralentización: reducir velocidad del jugador al 30% por 1 segundo
+                PrimeraPersona movimiento = other.GetComponent<PrimeraPersona>() 
+                                        ?? other.GetComponentInParent<PrimeraPersona>();
+                if (movimiento != null)
+                {
+                    movimiento.Ralentizar(1f);
+                    Debug.Log("[ProyectilVomito] Jugador ralentizado 1s.");
+                }
             }
             Destroy(gameObject);
             return;

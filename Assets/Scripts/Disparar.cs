@@ -8,7 +8,7 @@ public class Disparar : MonoBehaviour
     public Camera camara;
     public int dano = 2;
     public float alcance = 100f;
-    public float cadencia = 0.5f;
+    public float cadencia = 0.1f;
     public AudioClip sonidoDisparo;
     public GameObject muzzle;
 

@@ -168,3 +168,4 @@ MonoBehaviour:
   distanciaAtaque: 10
   cadenciaDisparo: 1.5
   prefabProyectil: {fileID: 7406371591890404891, guid: f6e60d5087ddc4046846d79be764f93f, type: 3}
+  velocidadProyectil: 12

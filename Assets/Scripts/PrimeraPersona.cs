@@ -12,9 +12,15 @@ public class PrimeraPersona : MonoBehaviour
     private Vector3 velY;
     private Vector3 knockback = Vector3.zero;
 
+    // Sistema de ralentización
+    private float velocidadActual;
+    private Coroutine corrutinaRalentizar;
+    [SerializeField] private float factorRalentizacion = 0.3f; // 30% de la velocidad normal
+
     void Start()
     {
         cc = GetComponent<CharacterController>();
+        velocidadActual = velocidad;
         // El cursor lo gestiona GameManager; aquí no lo forzamos
     }
 
@@ -36,7 +42,7 @@ public class PrimeraPersona : MonoBehaviour
         // Caminar (WASD o Flechas)
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-        Vector3 mov = (transform.right * h + transform.forward * v).normalized * velocidad;
+        Vector3 mov = (transform.right * h + transform.forward * v).normalized * velocidadActual;
 
         // Gravedad simple
         if (cc.isGrounded && velY.y < 0) velY.y = -2f;
@@ -50,5 +56,22 @@ public class PrimeraPersona : MonoBehaviour
     public void AplicarRebote(Vector3 direccionEmpuje, float fuerza)
     {
         knockback = direccionEmpuje.normalized * fuerza;
+    }
+
+    // Ralentizar al jugador durante 'duracion' segundos (efecto del vómito)
+    public void Ralentizar(float duracion = 1f)
+    {
+        if (corrutinaRalentizar != null)
+            StopCoroutine(corrutinaRalentizar);
+        corrutinaRalentizar = StartCoroutine(EfectoRalentizacion(duracion));
+    }
+
+    private System.Collections.IEnumerator EfectoRalentizacion(float duracion)
+    {
+        velocidadActual = velocidad * factorRalentizacion;
+        Debug.Log("[PrimeraPersona] Ralentizado " + duracion + "s (vel=" + velocidadActual + ")");
+        yield return new WaitForSeconds(duracion);
+        velocidadActual = velocidad;
+        Debug.Log("[PrimeraPersona] Velocidad restaurada.");
     }
 }
